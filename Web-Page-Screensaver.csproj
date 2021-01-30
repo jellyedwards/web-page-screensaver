@@ -176,7 +176,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release move $(TargetPath) $(TargetDir)$(TargetName).scr</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Release move $(TargetPath) $(TargetDir)$(TargetName).scr
+if $(ConfigurationName) == Debug copy $(TargetPath) $(TargetDir)$(TargetName).scr</PostBuildEvent>
   </PropertyGroup>
   <Import Project="packages\Microsoft.Web.WebView2.1.0.705.50\build\Microsoft.Web.WebView2.targets" Condition="Exists('packages\Microsoft.Web.WebView2.1.0.705.50\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

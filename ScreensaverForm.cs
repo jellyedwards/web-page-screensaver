@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.Diagnostics;
+using Microsoft.Web.WebView2.Core;
 
 namespace pl.polidea.lab.Web_Page_Screensaver
 {
@@ -90,7 +91,7 @@ namespace pl.polidea.lab.Web_Page_Screensaver
             }
             else
             {
-                webBrowser.Visible = false;
+                webView2.Visible = false;
             }
         }
 
@@ -101,15 +102,19 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
             if (string.IsNullOrWhiteSpace(url))
             {
-                webBrowser.Visible = false;
+                webView2.Visible = false;
             }
             else
             {
-                webBrowser.Visible = true;
+                webView2.Visible = true;
                 try
                 {
-                    Debug.WriteLine($"Navigating: {url}");
-                    webBrowser.Navigate(url);
+                    //if (webView2?.CoreWebView2 != null) 
+                    //{ 
+                    //    Debug.WriteLine($"Navigating: {url}");
+                    //webView2.CoreWebView2.Navigate(url);
+                    webView2.Source = new System.Uri(url);
+                    //}
                 }
                 catch
                 {
@@ -152,6 +157,25 @@ namespace pl.polidea.lab.Web_Page_Screensaver
         {
             Close();
         }
+
+        private Point? lastMousePos;
+
+        private void transparentPanel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            // screensavers and especially multi-window apps can get spurrious WM_MOUSEMOVE events
+            // that don't actually involve any movement (cursor chnages and some mouse driver software
+            // can generate them, for example) - so we record the actual mouse position and compare against it for actual movement.
+            if (this.lastMousePos == null)
+            {
+                this.lastMousePos = Cursor.Position;
+            }
+            else if (this.lastMousePos != Cursor.Position)
+            {
+                HandleUserActivity();
+
+            }
+
+        }
     }
 
     public class GlobalUserEventHandler : IMessageFilter
@@ -181,10 +205,7 @@ namespace pl.polidea.lab.Web_Page_Screensaver
                 || (m.Msg > WM_MOUSEMOVE && m.Msg <= WM_MBUTTONDBLCLK) || m.Msg == WM_KEYDOWN || m.Msg == WM_KEYUP)
             {
 
-                if (Event != null)
-                {
-                    Event();
-                }
+                Event?.Invoke();
             }
             // Always allow message to continue to the next filter control
             return false;

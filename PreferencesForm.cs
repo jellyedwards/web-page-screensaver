@@ -32,8 +32,9 @@ namespace pl.polidea.lab.Web_Page_Screensaver
             {
                 multiScreenGroup.Enabled = true;
                 SetMultiScreenButtonFromMode();
-                ArrangeScreenTabs();
             }
+
+            ArrangeScreenTabs();
         }
 
         private void LoadValuesForTab(int screenNum)
@@ -147,6 +148,9 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
         private void readBackValuesFromUI()
         {
+            //List<PrefsByScreenUserControl> controls = screenUserControls == null
+            //    ? new List<PrefsByScreenUserControl>() { prefsByScreenUserControl1 }
+            //    : screenUserControls;
             for (var i = 0; i < screenUserControls.Count; i++)
             {
                 var currentPrefsUserControl = screenUserControls[i];

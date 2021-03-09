@@ -30,7 +30,7 @@
         {
             this.closeButton = new System.Windows.Forms.Button();
             this.webView2 = new Microsoft.Web.WebView2.WinForms.WebView2();
-            this.transparentPanel1 = new Web_Page_Screensaver.TransparentPanel();
+            this.transparentPanel1 = new pl.polidea.lab.Web_Page_Screensaver.TransparentPanel();
             ((System.ComponentModel.ISupportInitialize)(this.webView2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +57,8 @@
             this.webView2.Size = new System.Drawing.Size(284, 262);
             this.webView2.TabIndex = 2;
             this.webView2.ZoomFactor = 1D;
+            this.webView2.NavigationStarting += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs>(this.webView2_NavigationStarting);
+            this.webView2.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webView2_NavigationCompleted);
             // 
             // transparentPanel1
             // 

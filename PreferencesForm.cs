@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace pl.polidea.lab.Web_Page_Screensaver
 {
@@ -50,29 +51,37 @@ namespace pl.polidea.lab.Web_Page_Screensaver
             switch (prefsManager.MultiScreenMode)
             {
                 case PreferencesManager.MultiScreenModeItem.Span:
+                    Trace.WriteLine("Span");
                     RemoveExtraTabPages();
                     screenTabControl.TabPages[0].Text = "Composite Screen";
                     screenUserControls = new List<PrefsByScreenUserControl>() { prefsByScreenUserControl1 };
                     LoadValuesForTab(0);
                     break;
                 case PreferencesManager.MultiScreenModeItem.Mirror:
+                    Trace.WriteLine("Mirror");
                     RemoveExtraTabPages();
                     screenTabControl.TabPages[0].Text = "Each Screen";
                     screenUserControls = new List<PrefsByScreenUserControl>() { prefsByScreenUserControl1 };
                     LoadValuesForTab(0);
                     break;
                 case PreferencesManager.MultiScreenModeItem.Separate:
+                    Trace.WriteLine("Separate");
+
                     for (int i = 0; i < Screen.AllScreens.Length; i++)
                     {
                         TabPage tabPage = null; 
 
                         if (i >= screenTabControl.TabPages.Count)
                         {
+                            Trace.WriteLine("i >= screenTabControl.TabPages.Count");
+
                             tabPage = new TabPage();
                             screenTabControl.TabPages.Add(tabPage);
 
                             if (i > 0)
                             {
+                                Trace.WriteLine("i > 0");
+
                                 var prefsByScreenUserControl = new PrefsByScreenUserControl
                                 {
                                     Name = string.Format("prefsByScreenUserControl{0}", i + 1),
@@ -89,6 +98,8 @@ namespace pl.polidea.lab.Web_Page_Screensaver
                         }
                         else if (screenTabControl.TabPages.Count == 1)
                         {
+                            Trace.WriteLine("screenTabControl.TabPages.Count == 1");
+
                             tabPage = screenTabControl.TabPages[0];
                             screenUserControls =
                                 new List<PrefsByScreenUserControl>() { prefsByScreenUserControl1 };

@@ -38,6 +38,8 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
             InitializeComponent();
 
+            Trace.WriteLine("hello from trace " + Environment.UserName);
+
             Cursor.Hide();
         }
 
@@ -56,6 +58,8 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
         private void ScreensaverForm_Load(object sender, EventArgs e)
         {
+            Trace.WriteLine("form loaded");
+
             if (Urls.Any())
             {
                 if (Urls.Count > 1)
@@ -95,8 +99,10 @@ namespace pl.polidea.lab.Web_Page_Screensaver
             }
         }
 
-        private void BrowseTo(string url)
+        private async void BrowseTo(string url)
         {
+            Trace.WriteLine("browse to " + url);
+
             // Disable the user event handler while navigating
             Application.RemoveMessageFilter(userEventHandler);
 
@@ -109,16 +115,22 @@ namespace pl.polidea.lab.Web_Page_Screensaver
                 webView2.Visible = true;
                 try
                 {
-                    //if (webView2?.CoreWebView2 != null) 
-                    //{ 
-                    //    Debug.WriteLine($"Navigating: {url}");
-                    //webView2.CoreWebView2.Navigate(url);
-                    webView2.Source = new System.Uri(url);
-                    //}
+                    Trace.WriteLine("set webView2.Source " + url);
+                    // CoreWebView2EnvironmentOptions opt = new CoreWebView2EnvironmentOptions("--incognito");
+                    string userDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                        + "\\Web-Page-Screensaver";
+                    // CoreWebView2Environment env = await CoreWebView2Environment.CreateAsync(null, null, opt);
+                    CoreWebView2Environment env = await CoreWebView2Environment.CreateAsync(null, userDataFolder);
+                    await webView2.EnsureCoreWebView2Async(env);
+                    webView2.CoreWebView2.Navigate(url);
+                    // webView2.EnsureCoreWebView2Async(new CoreWebView2Environment())
+                    // webView2.Source = new System.Uri(url);
                 }
-                catch
+                catch (Exception x)
                 {
                     // This can happen if IE pops up a window that isn't closed before the next call to Navigate()
+                    Trace.WriteLine("Error! " + x.ToString());
+
                 }
             }
             Application.AddMessageFilter(userEventHandler);
@@ -175,6 +187,18 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
             }
 
+        }
+
+        private void webView2_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
+        {
+            Trace.WriteLine("Navigation starting", e.ToString());
+        }
+
+        private void webView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            Trace.WriteLine("Navigation completed, success: "
+                + e.IsSuccess.ToString()
+                + " " + e.WebErrorStatus.ToString());
         }
     }
 

@@ -2,10 +2,12 @@
 using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
+using System.Diagnostics;
 
 namespace pl.polidea.lab.Web_Page_Screensaver
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Drawing;
 
     static class Program
@@ -21,6 +23,10 @@ namespace pl.polidea.lab.Web_Page_Screensaver
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Trace.WriteLine("args " + (args.Length > 0 
+                ? args[0].ToLower() : "No"));
+
 
             if (args.Length > 0 && args[0].ToLower().Contains("/p"))
                 return;
